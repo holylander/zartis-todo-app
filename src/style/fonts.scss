@@ -1,0 +1,16 @@
+$smallFont: 20px;
+$mediumFont: 30px;
+$bigFont: 45px;
+$biggerFont: 55px;
+
+
+.ZartisApp {
+
+    .errorFont{
+        font-style: italic;
+        &::before{
+            content: "*";
+        }
+        font-weight: 100;
+    }
+}

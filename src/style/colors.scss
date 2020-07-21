@@ -1,0 +1,28 @@
+$pageBgColor : lightgrey;
+$todoListBgColor : white;
+$activeRowBgColor: #d0d3d4;
+$textColor : #515a5a;
+
+$corpColor1 : #0046e2;
+$corpColor1Light : #006ef7;
+$corpColor2 : #9541f8;
+$corpColor2Light : #c999ff;
+$corpColor3: #00e8d7;
+$corpColor3Light: white;
+
+$corpErrColor1: darkred;
+
+.ZartisApp {
+    .greyColor {
+        color: #515a5a;
+    }
+
+    .corpColor2 {
+        color: $corpColor2;
+    }
+
+
+    .errorColor {
+        color: $corpErrColor1 !important;
+    }
+}
