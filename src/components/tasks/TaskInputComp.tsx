@@ -1,4 +1,4 @@
-import React, { EventHandler } from 'react';
+import React, { useState } from 'react';
 import { appStrings } from "../../loc/strings";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
@@ -16,47 +16,47 @@ interface InputState {
     err: boolean;
 }
 
-export class TaskInputComp extends React.Component<InputProps, InputState>{
-    constructor(props: InputProps) {
-        super(props);
-        this.state = { taskName: "", err: false };
-    }
+export function TaskInputComp(props: InputProps) {
 
-    render = () => {
-        return (
-            <div className="taskInput">
-                <FontAwesomeIcon icon={faChevronDown} className="corpColor2" />
-                <input
-                    type="text"
-                    placeholder={appStrings.taskInput} 
-                    value={this.state.taskName} 
-                    onChange={this.inputUpdate} 
-                    //onSubmit={this.saveInput}
-                    onKeyDown={this.saveInput} 
-                    className={this.state.err? "errorColor errorFont":""}></input>
-            </div>
-        );
-    }
+    const [taskFormStatus, setTaskFormStatus] = useState<InputState>({ taskName: "", err: false });  // You could also do a more granular definition of the state so isolated state updates were easier ( for instance, only updating the taskname )
+    
 
     /** checks for valid values */
-    private inputUpdate = (event: any) => {
+    const inputUpdate = (event: any) => {
         let validValues = /^(?:[A-Za-z]+)(?:[A-Za-z0-9 _]*)$/;
-        if (validValues.test(event.target.value) || event.target.value ==="") {
-            this.setState({ taskName: event.target.value, err: false });
-            this.props.submitErr("");
+        if (validValues.test(event.target.value) || event.target.value === "") {
+            setTaskFormStatus({ taskName: event.target.value, err: false });
+            props.submitErr("");
         }
         else {
-            this.setState({  taskName: event.target.value, err: true });
-            this.props.submitErr("Please only use alphanumeric values");
+            setTaskFormStatus({ taskName: event.target.value, err: true });
+            props.submitErr("Please only use alphanumeric values");
         }
 
     }
 
     /** sends the input value to parent */
-    private saveInput = (event:any) => {
-        if (this.state.taskName && !this.state.err && event.keyCode === 13) {
-            this.props.saveInput(this.state.taskName, ListActions.add);
-            this.setState({ taskName: "" });
+    const saveInput = (event: any) => {
+        if (taskFormStatus.taskName && !taskFormStatus.err && event.keyCode === 13) {
+            props.saveInput(taskFormStatus.taskName, ListActions.add);
+            setTaskFormStatus({ taskName: "", err: taskFormStatus.err });
         }
     }
+
+
+    return (
+        <div className="taskInput">
+            <FontAwesomeIcon icon={faChevronDown} className="corpColor2" />
+            <input
+                type="text"
+                placeholder={appStrings.taskInput}
+                value={taskFormStatus.taskName}
+                onChange={inputUpdate}
+                onSubmit={saveInput}
+                onKeyDown={saveInput}
+                className={taskFormStatus.err ? "errorColor errorFont" : ""}></input>
+        </div>
+    );
 }
+
+
