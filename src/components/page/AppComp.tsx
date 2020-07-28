@@ -5,7 +5,7 @@ import { appStrings } from "../../loc/strings";
 import { Task } from "../../modules/task";
 import { ListStatusDetails, ListViews, ListStatus, ListActions } from "../../modules/list";
 import { TasksDataProvider } from "../../modules/TasksDataProvider";
-import { TaskInputComp, TaskListComp, TaskListToolbarComp } from "../tasks";
+import { TaskInputComp, TaskListComp, TaskListToolbarComp, TaskLineComp } from "../tasks";
 
 import "./style.scss"
 import "../../style/general.scss"
@@ -159,7 +159,11 @@ export function AppComp() {
         <TaskListComp
           tasksFiltered={todoListDataState.tasksFiltered}
           action={listAction}
-        />
+        >
+          <ul className="taskLine">
+            {todoListDataState.tasksFiltered.map((task) => { return (<TaskLineComp key={`task-id-${task.id}`} {...{ task: task, action: listAction }} />); })}
+          </ul>
+        </TaskListComp>
         <TaskListToolbarComp
           view={todoListDataState.currentView}
           tasks={todoListDataState.tasks}
