@@ -52,10 +52,10 @@ export class TasksDataProvider {
     }
 
     /** Delete the completed tasks and return the number of deleted tasks */
-    public static async clearDoneTasks(tasks: Task[]): Promise<Task[]> {
+    public static async clearDoneTasks(): Promise<Task[]> {
         try {
             await this.wait(1000);
-            TasksDataProvider.tasks = TasksDataProvider.viewResults(ListViews.active, tasks);
+            TasksDataProvider.tasks = TasksDataProvider.viewResults(ListViews.active, TasksDataProvider.tasks);
             return Promise.resolve(TasksDataProvider.tasks);
         }
         catch (err) {
@@ -83,7 +83,7 @@ export class TasksDataProvider {
     }
 
     public static async retrieve(): Promise<Task[]> {
-        await this.wait(1000);
+        await this.wait(500);
         return Promise.resolve(TasksDataProvider.tasks);
     }
 

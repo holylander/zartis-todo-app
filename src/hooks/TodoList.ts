@@ -1,12 +1,6 @@
-import React, { useState } from 'react';
+import { TasksDataProvider } from './../modules/TasksDataProvider';
+import React, { useState, useEffect } from 'react';
 
-import { ListStatusDetails, ListStatus } from './../modules/list';
-
-export function useTodoListStatus() {
-    let status: ListStatusDetails = { msg: "", status: ListStatus.ok }
-
-    const [todoListStatus, setTodoListStatus] = useState(status);
-
-    return todoListStatus;
-}
+import { ListStatusDetails, ListStatus, ListViews } from './../modules/list';
+import { Task } from '../modules/task';
 
