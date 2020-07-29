@@ -8,7 +8,7 @@ import { ListActions } from "../../modules/list";
 
 export function TaskLineComp({ task, action }: { task: Task, action(taskId: number, action: ListActions): void }) {
     return (
-        <li>
+        <li className={task.status === TaskStatus.done ? "done" : ""}>
             <div className="taskStatus" onClick={() => action(task.id, ListActions.toogle)}>{taskStatusIcon(task.status)}</div>
             <div className="taskName unselectable">{task.name}</div>
             <div className="taskDelete" onClick={() => action(task.id, ListActions.delete)}><FontAwesomeIcon icon={faTimesCircle} className="greyColor" /></div>

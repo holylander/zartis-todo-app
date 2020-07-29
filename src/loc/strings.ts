@@ -8,6 +8,7 @@ export const appStrings = {
     leftTask : "left",
     task: "task(s)",
     completed : "completed",
-    loading: "...loading data"
+    loading: "...loading data",
+    refresh: "Refresh data"
 
 }

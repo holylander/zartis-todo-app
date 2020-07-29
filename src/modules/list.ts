@@ -11,7 +11,8 @@ export enum ListActions {
     add,
     delete,
     toogle,
-    changeView
+    changeView,
+    refresh
 }
 
 export enum ListStatus {

@@ -12,7 +12,7 @@ import "./style.scss"
 import "../../style/general.scss"
 import logo from "../../assets/zartis-logo.png"
 
-export const TodoListContext = createContext({});
+export const TodoListContext = createContext({ tasks: []});
 
 export function AppComp() {
 
@@ -44,15 +44,6 @@ export function AppComp() {
         })
       });
   }, []);
-
-  /** update the filtered collection of tasks */
-  /* useEffect(() => {
-    console.debug(`updated currentView is '${todoCurrentView}'`);
-  }, [todoCurrentView]); */
-
-  /** update the filtered collection of tasks */
-  /*   useEffect(() => {
-  }, [todoListTasks]); */
 
 
   /** updates or removes the current error on the app */
@@ -96,7 +87,7 @@ export function AppComp() {
       case (ListActions.add):
         try {
           await TasksDataProvider.addTask(value);
-          setTodoListTasks( await TasksDataProvider.retrieve());
+          setTodoListTasks(await TasksDataProvider.retrieve());
         }
         catch (err) {
           updateErr(`Could not add the new task '${value}'. Error details: ${err}`);
@@ -118,34 +109,39 @@ export function AppComp() {
           updateErr(`Could not change to the list view '${value}'. Error details: ${err}`);
         }
         break;
+      case (ListActions.refresh):
+        try {
+          setTodoListTasks(await TasksDataProvider.retrieve());
+        }
+        catch (err) {
+          updateErr(`Could not update the tasks from server. Error details: ${err}`);
+        }
+        break;
     }
     setTodoListState({ ...todoListState, loading: false });
 
     Promise.resolve();
   }
 
-
-
   return (
     <div className="ZartisApp">
-      <div className="App-header">
-        <TitleComp title={appStrings.appTitle} logo={logo} />
-        <StatusComp listStatus={{ status: todoListState.status, msg: todoListState.msg }} />
-      </div>
-      <div className="App-body">
-        <TaskInputComp submitErr={updateErr} saveInput={listAction} disable={todoListState.loading} />
-        <TaskListComp
-          tasksFiltered={TasksDataProvider.viewResults(todoCurrentView, todoListTasks) }
-          action={listAction} />
-        <TaskListToolbarComp
-          view={todoCurrentView}
-          tasks={todoListTasks}
-          actions={{
-            udpateView: listAction,
-            clearDone: listAction
-          }}
-          loading={todoListState.loading} />
-      </div>
+      <TodoListContext.Provider value={{ tasks: todoListTasks }}>
+        <div className="App-header">
+          <TitleComp title={appStrings.appTitle} logo={logo} />
+          <StatusComp listStatus={{ status: todoListState.status, msg: todoListState.msg }} />
+        </div>
+        <div className="App-body">
+          <TaskInputComp submitErr={updateErr} saveInput={listAction} disable={todoListState.loading} />
+          <TaskListComp
+            tasksFiltered={TasksDataProvider.viewResults(todoCurrentView, todoListTasks)}
+            action={listAction} />
+          <TaskListToolbarComp
+            view={todoCurrentView}
+            tasks={todoListTasks}
+            actions={listAction}
+            loading={todoListState.loading} />
+        </div>
+      </TodoListContext.Provider>
     </div>
   );
 }
