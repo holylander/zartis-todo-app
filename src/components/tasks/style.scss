@@ -75,6 +75,9 @@
         input {
             flex-grow: 1;
         }
+        &.disabled{
+            opacity: 0.5;
+        }
     }
 
     .taskLine {

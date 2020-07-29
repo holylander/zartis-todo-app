@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import { TitleComp } from "./TitleComp";
 import { StatusComp } from "./StatusComp";
 import { appStrings } from "../../loc/strings";
@@ -11,60 +11,67 @@ import "./style.scss"
 import "../../style/general.scss"
 import logo from "../../assets/zartis-logo.png"
 
+export const TodoListContext = createContext({});
 
 export function AppComp() {
 
-  const [todoListDataState, setTodoListDataState] = useState({
-    tasks: [],
-    tasksFiltered: [],
-    currentView: ListViews.all
-  })
-
+  const [todoListTasks, setTodoListTasks] = useState([]);
+  const [todoCurrentView, setTodoCurrentView] = useState(ListViews.all);
   const [todoListState, setTodoListState] = useState({
     status: ListStatus.ok,
     loading: true,
-    msg: ""
+    msg: "",
   })
 
-  /** retrive the tasks from server */
+  /** retrieve the tasks from server */
   useEffect(() => {
     TasksDataProvider.connect()
       .then((tasks) => {
-        setTodoListDataState({
-          tasks: tasks,
-          tasksFiltered: TasksDataProvider.viewResults(ListViews.all, tasks),
-          currentView: ListViews.all
-        });
+        setTodoListTasks(tasks);
         setTodoListState({
           ...todoListState,
-          status: ListStatus.ok,
-          msg: "Tasks data fetched from server"
+          msg: "Tasks data fetched from server",
+          loading: false,
         });
       })
       .catch((err) => {
         setTodoListState({
           ...todoListState,
           status: ListStatus.err,
-          msg: err
+          msg: err,
+          loading: false
         })
-      })
-      .finally(() => {
-        setTodoListState({
-          ...todoListState,
-          loading: false,
-        })
-      })
-  }, todoListDataState.tasks);
+      });
+      console.debug(todoListState);
+  }, []);
+
+  /** update the filtered collection of tasks */
+  useEffect(() => {
+    console.debug(`updated currentView is '${todoCurrentView}'`);
+  }, [todoCurrentView]);
+
+  /** update the filtered collection of tasks */
+  useEffect(() => {
+    console.debug("Some tasks has changed");
+    console.debug(todoListTasks);
+    /* setTodoListTasks({
+      ...todoListTasks,
+    }); */
+  }, [todoListTasks]);
 
 
   /** updates or removes the current error on the app */
   const updateErr = (error: string): void => {
     error ?
-      setTodoListState({ msg: error, status: ListStatus.err, loading: false }) :
-      setTodoListState({ msg: "", status: ListStatus.ok, loading: false });
+      setTodoListState({
+        ...todoListState,
+        msg: error, status: ListStatus.err, loading: false
+      }) :
+      setTodoListState({
+        ...todoListState,
+        msg: "", status: ListStatus.ok, loading: false
+      });
   }
-
-
 
 
   /** performs a list action */
@@ -75,13 +82,8 @@ export function AppComp() {
     switch (action) {
       case (ListActions.toogle):
         try {
-          await TasksDataProvider.toggleTask(value, todoListDataState.tasks);
-          let tasksFromServer: Task[] = await TasksDataProvider.retrieve();
-          setTodoListDataState({
-            ...todoListDataState,
-            tasks: await TasksDataProvider.retrieve(),
-            tasksFiltered: TasksDataProvider.viewResults(todoListDataState.currentView, tasksFromServer),
-          });
+          await TasksDataProvider.toggleTask(value);
+          setTodoListTasks(await TasksDataProvider.retrieve());
         }
         catch (err) {
           updateErr(`Could not change the status of the task '${value}'. Error details: ${err}`);
@@ -89,13 +91,8 @@ export function AppComp() {
         break;
       case (ListActions.delete):
         try {
-          await TasksDataProvider.deleteTask(value, todoListDataState.tasks);
-          let tasksFromServer: Task[] = await TasksDataProvider.retrieve();
-          setTodoListDataState({
-            ...todoListDataState,
-            tasks: tasksFromServer,
-            tasksFiltered: TasksDataProvider.viewResults(todoListDataState.currentView, tasksFromServer),
-          });
+          await TasksDataProvider.deleteTask(value);
+          setTodoListTasks(await TasksDataProvider.retrieve());
         }
         catch (err) {
           updateErr(`Could not change the status of the task '${value}'. Error details: ${err}`);
@@ -103,13 +100,8 @@ export function AppComp() {
         break;
       case (ListActions.add):
         try {
-          await TasksDataProvider.addTask(value, todoListDataState.tasks);
-          let tasksFromServer: Task[] = await TasksDataProvider.retrieve();
-          setTodoListDataState({
-            ...todoListDataState,
-            tasks: tasksFromServer,
-            tasksFiltered: TasksDataProvider.viewResults(todoListDataState.currentView, tasksFromServer),
-          });
+          await TasksDataProvider.addTask(value);
+          setTodoListTasks( await TasksDataProvider.retrieve());
         }
         catch (err) {
           updateErr(`Could not add the new task '${value}'. Error details: ${err}`);
@@ -117,11 +109,9 @@ export function AppComp() {
         break;
       case (ListActions.changeView):
         try {
-          setTodoListDataState({
-            ...todoListDataState,
-            tasksFiltered: TasksDataProvider.viewResults(value, todoListDataState.tasks),
-            currentView: value
-          });
+          setTodoCurrentView(value);
+          setTimeout(() => { console.debug(`current view is ${todoCurrentView}`); }, 3000);
+          console.debug(`current view is ${todoCurrentView}`);
         }
         catch (err) {
           updateErr(`Could not change to the list view '${value}'. Error details: ${err}`);
@@ -129,12 +119,7 @@ export function AppComp() {
         break;
       case (ListActions.clearDone):
         try {
-          let cleanedTasks: Task[] = await TasksDataProvider.clearDoneTasks()
-          setTodoListDataState({
-            ...todoListDataState,
-            tasks: cleanedTasks,
-            tasksFiltered: TasksDataProvider.viewResults(todoListDataState.currentView, cleanedTasks),
-          });
+          setTodoListTasks(await TasksDataProvider.clearDoneTasks());
         }
         catch (err) {
           updateErr(`Could not change to the list view '${value}'. Error details: ${err}`);
@@ -155,20 +140,18 @@ export function AppComp() {
         <StatusComp listStatus={{ status: todoListState.status, msg: todoListState.msg }} />
       </div>
       <div className="App-body">
-        <TaskInputComp submitErr={updateErr} saveInput={listAction} />
+        <TaskInputComp submitErr={updateErr} saveInput={listAction} disable={todoListState.loading} />
         <TaskListComp
-          tasksFiltered={todoListDataState.tasksFiltered}
-          action={listAction}
-        />
+          tasksFiltered={TasksDataProvider.viewResults(todoCurrentView, todoListTasks) }
+          action={listAction} />
         <TaskListToolbarComp
-          view={todoListDataState.currentView}
-          tasks={todoListDataState.tasks}
+          view={todoCurrentView}
+          tasks={todoListTasks}
           actions={{
             udpateView: listAction,
             clearDone: listAction
           }}
-          loading={todoListState.loading}
-        />
+          loading={todoListState.loading} />
       </div>
     </div>
   );

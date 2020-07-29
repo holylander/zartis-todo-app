@@ -8,13 +8,12 @@ export class TasksDataProvider {
 
 
     /** add a new task, with a sequential ID */
-    public static async addTask(taskname: string, tasks: Task[]) {
+    public static async addTask(taskname: string) {
         this.taskId++
         try {
             let newTask: Task = { name: taskname, status: TaskStatus.pending, id: TasksDataProvider.taskId };
-            await this.wait(1000);
-            tasks.push(newTask);
-            TasksDataProvider.tasks = tasks;
+            await this.wait(500);
+            TasksDataProvider.tasks.push(newTask);
             return Promise.resolve(newTask.id);
         }
         catch (err) {
@@ -24,12 +23,11 @@ export class TasksDataProvider {
     }
 
     /** Changes the status of a task */
-    public static async toggleTask(id: number, tasks: Task[]): Promise<TaskStatus> {
+    public static async toggleTask(id: number): Promise<TaskStatus> {
         try {
-            let task: Task = tasks.filter((task) => task.id === id)[0];
+            let task: Task = TasksDataProvider.tasks.filter((task) => task.id === id)[0];
             await this.wait(500);
             task.status === TaskStatus.done ? task.status = TaskStatus.pending : task.status = TaskStatus.done;
-            TasksDataProvider.tasks = tasks;
             return Promise.resolve(task.status);
         }
         catch {
@@ -38,12 +36,11 @@ export class TasksDataProvider {
     }
 
     /** delete an existing task */
-    public static async deleteTask(id: number, tasks: Task[]): Promise<void> {
+    public static async deleteTask(id: number): Promise<void> {
         try {
-            let task: Task = tasks.filter((task) => task.id === id)[0];
-            await this.wait(1000);
-            tasks.splice(tasks.indexOf(task), 1);
-            TasksDataProvider.tasks = tasks;
+            let task: Task = TasksDataProvider.tasks.filter((task) => task.id === id)[0];
+            await this.wait(500);
+            TasksDataProvider.tasks.splice(TasksDataProvider.tasks.indexOf(task), 1);
             return Promise.resolve();
         }
         catch {
@@ -54,7 +51,7 @@ export class TasksDataProvider {
     /** Delete the completed tasks and return the number of deleted tasks */
     public static async clearDoneTasks(): Promise<Task[]> {
         try {
-            await this.wait(1000);
+            await this.wait(500);
             TasksDataProvider.tasks = TasksDataProvider.viewResults(ListViews.active, TasksDataProvider.tasks);
             return Promise.resolve(TasksDataProvider.tasks);
         }
@@ -76,9 +73,9 @@ export class TasksDataProvider {
     }
 
     public static async connect(): Promise<Task[]> {
-        await this.wait(1000);
-        await TasksDataProvider.addTask("Test task 1", TasksDataProvider.tasks);
-        await TasksDataProvider.addTask("Test task 2", TasksDataProvider.tasks);
+        await this.wait(500);
+        await TasksDataProvider.addTask("Test task 1");
+        await TasksDataProvider.addTask("Test task 2");
         return Promise.resolve(TasksDataProvider.tasks);
     }
 

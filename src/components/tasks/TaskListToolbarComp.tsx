@@ -46,10 +46,10 @@ function taskStats(tasks: Task[], view: ListViews) {
                 (<span> {`${appStrings.allTasksView} ${appStrings.task} ${appStrings.completed}`}</span>);
 
         case (ListViews.active):
-            return (<span> {`${TasksDataProvider.viewResults(ListViews.active, tasks).length} active ${appStrings.task}`}</span>);
+            return (<span> {`${TasksDataProvider.viewResults(view, tasks).length} active ${appStrings.task}`}</span>);
 
         case (ListViews.completed):
-            return (<span> {`${TasksDataProvider.viewResults(ListViews.completed, tasks).length} completed ${appStrings.task}`}</span>);
+            return (<span> {`${TasksDataProvider.viewResults(view, tasks).length} completed ${appStrings.task}`}</span>);
     }
 }
 

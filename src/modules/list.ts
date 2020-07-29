@@ -1,9 +1,9 @@
-import {  appStrings} from "../loc/strings";
+import { appStrings } from "../loc/strings";
 
 export enum ListViews {
-    all,
-    active,
-    completed
+    all = 0,
+    active = 1,
+    completed = 2
 }
 
 export enum ListActions {

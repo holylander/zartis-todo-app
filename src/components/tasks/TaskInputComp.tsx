@@ -9,6 +9,7 @@ import "./style.scss"
 interface InputProps {
     saveInput(taskName: string, action: ListActions): void;
     submitErr(msg: string): void;
+    disable: boolean;
 }
 
 interface InputState {
@@ -45,7 +46,7 @@ export function TaskInputComp(props: InputProps) {
 
 
     return (
-        <div className="taskInput">
+        <div className={`taskInput ${props.disable? "disabled":""}`}>
             <FontAwesomeIcon icon={faChevronDown} className="corpColor2" />
             <input
                 type="text"
@@ -54,7 +55,8 @@ export function TaskInputComp(props: InputProps) {
                 onChange={inputUpdate}
                 onSubmit={saveInput}
                 onKeyDown={saveInput}
-                className={taskFormStatus.err ? "errorColor errorFont" : ""}></input>
+                className={ `${taskFormStatus.err ? "errorColor errorFont" : ""} ` } 
+                disabled= {props.disable}/>
         </div>
     );
 }
