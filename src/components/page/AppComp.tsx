@@ -7,6 +7,7 @@ import { ListStatusDetails, ListViews, ListStatus, ListActions } from "../../mod
 import { TasksDataProvider } from "../../modules/TasksDataProvider";
 import { TaskInputComp, TaskListComp, TaskListToolbarComp } from "../tasks";
 
+
 import "./style.scss"
 import "../../style/general.scss"
 import logo from "../../assets/zartis-logo.png"
@@ -42,22 +43,16 @@ export function AppComp() {
           loading: false
         })
       });
-      console.debug(todoListState);
   }, []);
 
   /** update the filtered collection of tasks */
-  useEffect(() => {
+  /* useEffect(() => {
     console.debug(`updated currentView is '${todoCurrentView}'`);
-  }, [todoCurrentView]);
+  }, [todoCurrentView]); */
 
   /** update the filtered collection of tasks */
-  useEffect(() => {
-    console.debug("Some tasks has changed");
-    console.debug(todoListTasks);
-    /* setTodoListTasks({
-      ...todoListTasks,
-    }); */
-  }, [todoListTasks]);
+  /*   useEffect(() => {
+  }, [todoListTasks]); */
 
 
   /** updates or removes the current error on the app */
@@ -110,8 +105,6 @@ export function AppComp() {
       case (ListActions.changeView):
         try {
           setTodoCurrentView(value);
-          setTimeout(() => { console.debug(`current view is ${todoCurrentView}`); }, 3000);
-          console.debug(`current view is ${todoCurrentView}`);
         }
         catch (err) {
           updateErr(`Could not change to the list view '${value}'. Error details: ${err}`);

@@ -12,7 +12,7 @@ interface Actions {
 }
 
 export function TaskListToolbarComp({ tasks, view, actions, loading }: { tasks: Task[], view: ListViews, actions: Actions, loading: boolean }) {
-    let doneTasks: number = TasksDataProvider.viewResults(ListViews.completed, tasks).length
+    let doneTasks: number = TasksDataProvider.viewResults(ListViews.completed, tasks).length;
     return (
         <div className="taskToolbar">
             <div className={`taskListStatus ${loading ? `loadingGif` : ``}`}> {loading ? <img src={loadingGif} /> : taskStats(tasks, view)}</div>
