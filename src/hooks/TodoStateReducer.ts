@@ -12,7 +12,7 @@ export enum TodoStateReducerActions {
 export const todoStateInit: TodoState = {
     status: ListStatus.ok,
     loading: true,
-    msg: ""
+    msg: "App init"
 }
 
 /** Updates the list state */
