@@ -1,3 +1,4 @@
+import { ListStatus } from './../modules/list';
 import { TodoStateReducer, todoStateInit, TodoStateReducerActions } from "./TodoStateReducer";
 import { TodoTasksReducer, TodoTasksReducerActions, } from "./TodoTasksReducer";
 import { useReducer, useState } from "react";
@@ -26,6 +27,7 @@ export const useTodoActionsReducer = () => {
     const [todoCurrentView, setTodoCurrentView] = useState(ListViews.all);
 
     const performTodoAction = async (action: { payload: any, type: TodoActionsReducer }) => {
+        let existingInputErr:string = todoStatus.status === ListStatus.inputErr ? todoStatus.msg : "";
         todoStatusDispatch({ type: TodoStateReducerActions.fetch });
 
         switch (action.type) {
@@ -97,6 +99,9 @@ export const useTodoActionsReducer = () => {
                     todoStatusDispatch({ payload: `Could not update the list view: ${err}`, type: TodoStateReducerActions.error });
                 }
                 break;
+        }
+        if (existingInputErr) {
+            todoStatusDispatch({ payload: existingInputErr, type: TodoStateReducerActions.inputError });
         }
     }
 

@@ -10,7 +10,8 @@ export enum ListViews {
 
 export enum ListStatus {
     ok,
-    err
+    err,
+    inputErr
 }
 
 export interface ListStatusDetails {
