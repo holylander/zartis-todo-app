@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { appStrings } from "../../loc/strings";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { ListActions } from "../../modules/list";
+import { TodoActionsReducer, TodoAction } from "../../hooks/TodoActionsReducer";
 
 import "./style.scss"
 
 interface InputProps {
-    saveInput(taskName: string, action: ListActions): void;
+    saveInput(action: TodoAction): void;
     submitErr(msg: string): void;
     disable: boolean;
 }
@@ -20,7 +20,7 @@ interface InputState {
 export function TaskInputComp(props: InputProps) {
 
     const [taskFormStatus, setTaskFormStatus] = useState<InputState>({ taskName: "", err: false });  // You could also do a more granular definition of the state so isolated state updates were easier ( for instance, only updating the taskname )
-    
+
 
     /** checks for valid values */
     const inputUpdate = (event: any) => {
@@ -39,14 +39,14 @@ export function TaskInputComp(props: InputProps) {
     /** sends the input value to parent */
     const saveInput = (event: any) => {
         if (taskFormStatus.taskName && !taskFormStatus.err && event.keyCode === 13) {
-            props.saveInput(taskFormStatus.taskName, ListActions.add);
+            props.saveInput({ payload: taskFormStatus.taskName, type: TodoActionsReducer.add });
             setTaskFormStatus({ taskName: "", err: taskFormStatus.err });
         }
     }
 
 
     return (
-        <div className={`taskInput ${props.disable? "disabled":""}`}>
+        <div className={`taskInput ${props.disable ? "disabled" : ""}`}>
             <FontAwesomeIcon icon={faChevronDown} className="corpColor2" />
             <input
                 type="text"
@@ -55,8 +55,8 @@ export function TaskInputComp(props: InputProps) {
                 onChange={inputUpdate}
                 onSubmit={saveInput}
                 onKeyDown={saveInput}
-                className={ `${taskFormStatus.err ? "errorColor errorFont" : ""} ` } 
-                disabled= {props.disable}/>
+                className={`${taskFormStatus.err ? "errorColor errorFont" : ""} `}
+                disabled={props.disable} />
         </div>
     );
 }

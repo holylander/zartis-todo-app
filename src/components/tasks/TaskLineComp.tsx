@@ -4,14 +4,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNotch, faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
 import "./style.scss"
-import { ListActions } from "../../modules/list";
+import { TodoAction, TodoActionsReducer } from "../../hooks/TodoActionsReducer";
 
-export function TaskLineComp({ task, action }: { task: Task, action(taskId: number, action: ListActions): void }) {
+export function TaskLineComp({ task, action }: { task: Task, action(action: TodoAction): void }) {
     return (
         <li className={task.status === TaskStatus.done ? "done" : ""}>
-            <div className="taskStatus" onClick={() => action(task.id, ListActions.toogle)}>{taskStatusIcon(task.status)}</div>
+            <div className="taskStatus" onClick={() => action({ payload: task.id, type: TodoActionsReducer.toogle },)}>{taskStatusIcon(task.status)}</div>
             <div className="taskName unselectable">{task.name}</div>
-            <div className="taskDelete" onClick={() => action(task.id, ListActions.delete)}><FontAwesomeIcon icon={faTimesCircle} className="greyColor" /></div>
+            <div className="taskDelete" onClick={() => action({ payload: task.id, type: TodoActionsReducer.delete },)}><FontAwesomeIcon icon={faTimesCircle} className="greyColor" /></div>
         </li>
     );
 }

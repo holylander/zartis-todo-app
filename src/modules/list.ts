@@ -6,14 +6,7 @@ export enum ListViews {
     completed = 2
 }
 
-export enum ListActions {
-    clearDone,
-    add,
-    delete,
-    toogle,
-    changeView,
-    refresh
-}
+
 
 export enum ListStatus {
     ok,
@@ -23,4 +16,11 @@ export enum ListStatus {
 export interface ListStatusDetails {
     status: ListStatus;
     msg: string;
+}
+
+export interface TodoState{
+    status: ListStatus,
+    loading: boolean,
+    msg: string,
+    //queried: boolean
 }

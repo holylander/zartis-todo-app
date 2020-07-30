@@ -3,15 +3,11 @@ import { Task } from '../../modules/task';
 import { TaskLineComp } from "./TaskLineComp";
 
 import "./style.scss"
-import { ListActions } from '../../modules/list';
+import { TodoAction } from '../../hooks/TodoActionsReducer';
 
-/* interface Actions {
-    toogleTask(taskId: number, action: ListActions): void;
-    deleteTask(taskId: number, action: ListActions): void;
-}
- */
 
-export function TaskListComp({ tasksFiltered, action }: { tasksFiltered: Task[], action(taskId: number, action: ListActions): void }) {
+
+export function TaskListComp({ tasksFiltered, action }: { tasksFiltered: Task[], action( action: TodoAction): void }) {
     return (
         <div>
             <ul className="taskLine">
