@@ -16,11 +16,10 @@ export enum TodoActionsReducer {
     toogle,
     changeView,
     refresh,
-    init,
-    load,
-    error
+    init
 }
 
+/** middleware for implementing async data into useReducer hook */
 export const useTodoActionsReducer = () => {
     const [todoTasks, todoTaskDispatch] = useReducer(TodoTasksReducer, []);
     const [todoStatus, todoStatusDispatch] = useReducer(TodoStateReducer, todoStateInit);
@@ -89,10 +88,12 @@ export const useTodoActionsReducer = () => {
                 break;
             case (TodoActionsReducer.changeView):
                 try {
-                    setTodoCurrentView(action.payload)
+                    setTodoCurrentView(action.payload);
+                    //throw "Server error!"; //some fake error
                     todoStatusDispatch({ payload: `List view was updated`, type: TodoStateReducerActions.success });
                 }
                 catch (err) {
+                    setTodoCurrentView(todoCurrentView);
                     todoStatusDispatch({ payload: `Could not update the list view: ${err}`, type: TodoStateReducerActions.error });
                 }
                 break;
