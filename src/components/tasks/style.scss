@@ -89,7 +89,7 @@
         li {
             display: flex;
             flex-direction: row;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             justify-content: left;
             align-self: stretch;
             font-size: $mediumFont;
@@ -137,6 +137,7 @@
                 flex-grow: 1;
                 padding: 0px 10px;
                 color: $corpColor2;
+                word-break: break-all;
             }
 
             .taskDelete {
