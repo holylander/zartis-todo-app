@@ -21,16 +21,17 @@ export function AppComp() {
   const [todoTasks, todoStatus, todoCurrentView, performTodoAction, todoStatusDispatch] = useTodoActionsReducer();
 
 
-  /** updates or removes the current error on the app */
+  /** updates or removes the current error status on the app */
   const updateErr = (error: string): void => {
     error?
-      todoStatusDispatch({type: TodoStateReducerActions.error ,payload:error}):
+      todoStatusDispatch({type: TodoStateReducerActions.inputError ,payload:error}):
       todoStatusDispatch({type: TodoStateReducerActions.success ,payload:""});    
   }
 
+  /** connect to api once component is mounted */
   useEffect(()=>{
     performTodoAction({type:TodoActionsReducer.init});
-  },todoTasks);
+  },[]);
 
   return (
     <div className="ZartisApp">
