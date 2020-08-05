@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="1"
+            failures="0"
+            tests="1">
+
+  <testsuite name="searchExample"
+    errors="1" failures="0" hostname="" id="" package="searchExample" skipped="0"
+    tests="1" time="3.483" timestamp="">
+  
+    <testcase name="Search engine example" classname="searchExample" time="3.483" assertions="0">
+    <error message="An error occurred while running .click() command on &lt;input[type=submit]&gt;: element not interactable; Element &lt;input id=&#34;sb_form_go&#34; name=&#34;search&#34; type=&#34;submit&#34;&gt; could not be scrolled into view" type="error"><![CDATA[
+    TimeoutError: An error occurred while running .click() command on &lt;input[type=submit]&gt;: element not interactable; Element &lt;input id=&#34;sb_form_go&#34; name=&#34;search&#34; type=&#34;submit&#34;&gt; could not be scrolled into view
+    at PeriodicPromise.getError (C:\Users\alber\AppData\Roaming\npm\node_modules\nightwatch\lib\utils\periodic-promise.js:161:12)
+    at PeriodicPromise.perform (C:\Users\alber\AppData\Roaming\npm\node_modules\nightwatch\lib\utils\periodic-promise.js:111:16)
+    at process._tickCallback (internal/process/next_tick.js:68:7)
+    ]]></error>
+    
+    </testcase>
+  
+
+  
+    <system-err>
+        TimeoutError: An error occurred while running .click() command on &lt;input[type=submit]&gt;: element not interactable; Element &lt;input id=&#34;sb_form_go&#34; name=&#34;search&#34; type=&#34;submit&#34;&gt; could not be scrolled into view
+   {&#34;status&#34;:-1,&#34;value&#34;:{&#34;error&#34;:&#34;element not interactable&#34;,&#34;message&#34;:&#34;Element &lt;input id=\&#34;sb_form_go\&#34; name=\&#34;search\&#34; type=\&#34;submit\&#34;&gt; could not be scrolled into view&#34;,&#34;stacktrace&#34;:&#34;WebDriverError@chrome://marionette/content/error.js:175:5\nElementNotInteractableError@chrome://marionette/content/error.js:285:5\nwebdriverClickElement@chrome://marionette/content/interaction.js:159:11\ninteraction.clickElement@chrome://marionette/content/interaction.js:131:11\nclickElement/&lt;@chrome://marionette/content/listener.js:1359:28\nnavigate/&lt;@chrome://marionette/content/listener.js:458:13\nnavigate@chrome://marionette/content/listener.js:459:7\nclickElement@chrome://marionette/content/listener.js:1357:18\n&#34;},&#34;errorStatus&#34;:&#34;&#34;,&#34;error&#34;:&#34;Element &lt;input id=\&#34;sb_form_go\&#34; name=\&#34;search\&#34; type=\&#34;submit\&#34;&gt; could not be scrolled into view&#34;,&#34;httpStatusCode&#34;:400}
+   
+    </system-err>
+  
+
+    
+
+  
+  </testsuite>
+</testsuites>
